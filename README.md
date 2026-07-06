@@ -1,36 +1,46 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# 🔍 img_source_finder
 
-## Getting Started
+A full-stack, type-safe **Next.js and TypeScript** application engineered to analyze profile imagery, track digital footprints, and detect spam or fraudulent social media accounts. This application serves as an advanced implementation of modular frontend components and asynchronous cloud API orchestration.
 
-First, run the development server:
+## 🚀 How the System Works (API Architecture)
+The application handles account verification by chaining together three distinct background service nodes:
+1. **Host Node (ImgBB API):** Temporarily uploads and maps localized images to cloud URLs.
+2. **Scraper Node (SerpAPI):** Executes reverse-image operations across search indexes to trace original sources or stolen celebrity profiles.
+3. **Reasoning Node (Groq API):** Feeds structured web metadata into high-speed LLM inference models to generate a security risk calculation (`Low`, `Medium`, or `High`).
 
-```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
-```
+## 💻 Tech Stack & Project Architecture
+* **Frontend Core:** Next.js 15 (App Router), React, TypeScript
+* **Styling Engine:** Tailwind CSS / Custom Inline Flex Layouts
+* **Build Engine:** Turbopack (Optimized Next.js local bundler)
+* **Backend Layer:** Next.js API Routes (`/api/describe`, `/api/reverse`, `/api/social-scan`)
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+### 📦 Key Component Structure
+* `AnalysisCard.tsx`: Dynamically color-codes UI components based on the threat index score (`Low`, `Medium`, `High`).
+* `FaceCropper.tsx`: Handles client-side canvas mutations to isolate profile subjects before processing.
+* `UploadZone.tsx`: Manages dropzone states for smooth client image ingestion.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## ⚠️ Current Engineering Limitations
+* **Strict Type Mapping Alerts:** Minor TypeScript compiler assignments in specific UI card components are currently undergoing refinement to resolve strict interface mismatches without breaking runtime states.
+* **Model Inference Edge Cases:** Since the pipeline relies on automated scraping signatures, accuracy can fluctuate if a profile image lacks clear public web indexes.
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+## ⚙️ Installation & Development
 
-## Learn More
+### Local Setup
+1. Clone the project files:
+   ```bash
+   git clone https://github.com
+   cd img_source_finder
+   ```
 
-To learn more about Next.js, take a look at the following resources:
+2. Establish your local variables inside a `.env.local` file:
+   ```env
+   GROQ_API_KEY=your_key
+   IMGBB_API_KEY=your_key
+   SERPAPI_KEY=your_key
+   ```
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+3. Initialize dependencies and execute the Turbopack local dev engine:
+   ```bash
+   npm install
+   npm run dev
+   ```
