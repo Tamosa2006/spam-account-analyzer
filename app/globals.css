@@ -1,0 +1,285 @@
+@import "tailwindcss";
+
+:root {
+  --green: #4ade80;
+  --purple: #a78bfa;
+  --blue: #60a5fa;
+  --bg: #020818;
+  --bg2: #050d1f;
+  --card: #080f24;
+  --border: #0f1e3d;
+  --text: #e2e8f0;
+  --muted: #475569;
+}
+
+* { box-sizing: border-box; margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: 'DM Sans', 'Segoe UI', sans-serif;
+  cursor: none;
+  overflow-x: hidden;
+}
+
+/* ── Custom Cursor ── */
+#cursor {
+  position: fixed;
+  width: 12px; height: 12px;
+  border: 1.5px solid var(--green);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9999;
+  mix-blend-mode: screen;
+}
+
+#cursor-trail {
+  position: fixed;
+  width: 30px; height: 30px;
+  border: 1px solid rgba(74,222,128,0.25);
+  border-radius: 50%;
+  pointer-events: none;
+  z-index: 9998;
+  transition: all 0.15s ease;
+}
+
+/* ── HUD Corners ── */
+.hud-tl {
+  position: fixed; top: 0; left: 0;
+  width: 100px; height: 100px;
+  border-top: 1px solid rgba(74,222,128,0.1);
+  border-left: 1px solid rgba(74,222,128,0.1);
+  pointer-events: none; z-index: 1;
+}
+.hud-br {
+  position: fixed; bottom: 0; right: 0;
+  width: 100px; height: 100px;
+  border-bottom: 1px solid rgba(167,139,250,0.1);
+  border-right: 1px solid rgba(167,139,250,0.1);
+  pointer-events: none; z-index: 1;
+}
+
+/* ── Animations ── */
+@keyframes pulse-green {
+  0%, 100% { opacity: 1; box-shadow: 0 0 0 0 rgba(74,222,128,0.4); }
+  50%       { opacity: 0.5; box-shadow: 0 0 0 6px rgba(74,222,128,0); }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0px); }
+  50%       { transform: translateY(-6px); }
+}
+
+@keyframes gradient-shift {
+  0%   { background-position: 0% 50%; }
+  50%  { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+/* ── pulse-social for SocialScan scanning animation ── */
+@keyframes pulse-social {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50%       { opacity: 0.5; transform: scale(0.95); }
+}
+
+/* ── Result Cards ── */
+.result-card {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 14px;
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+
+.result-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0; height: 1px;
+  background: linear-gradient(90deg, transparent, var(--green), var(--purple), transparent);
+  opacity: 0.5;
+}
+
+/* ── Card Label ── */
+.card-label {
+  font-size: 11px; font-weight: 700;
+  letter-spacing: 0.15em; text-transform: uppercase;
+  color: var(--muted); margin-bottom: 14px;
+  display: flex; align-items: center; gap: 8px;
+}
+
+/* ── Tags ── */
+.tag {
+  background: rgba(167,139,250,0.08);
+  border: 1px solid rgba(167,139,250,0.25);
+  color: rgba(167,139,250,0.9);
+  padding: 4px 12px; border-radius: 999px;
+  font-size: 12px; cursor: default; transition: all 0.2s;
+}
+.tag:hover {
+  background: rgba(167,139,250,0.18);
+  border-color: var(--purple);
+}
+
+/* ── Description ── */
+.desc-text {
+  font-size: 15px; line-height: 1.8; color: var(--text);
+  border-left: 2px solid var(--green);
+  padding-left: 16px; margin-bottom: 0;
+}
+
+/* ── Source Items ── */
+.source-item {
+  display: flex; align-items: center; gap: 12px;
+  padding: 12px 0; border-bottom: 1px solid var(--border);
+  transition: padding-left 0.2s ease;
+}
+.source-item:last-child { border-bottom: none; }
+.source-item:hover { padding-left: 6px; }
+
+.source-num {
+  width: 26px; height: 26px;
+  background: rgba(96,165,250,0.08);
+  border: 1px solid rgba(96,165,250,0.2);
+  border-radius: 6px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 11px; color: var(--blue);
+  flex-shrink: 0; font-weight: 700;
+}
+
+.source-link {
+  color: var(--blue); font-size: 13px;
+  text-decoration: none; overflow: hidden;
+  text-overflow: ellipsis; white-space: nowrap;
+  transition: color 0.2s;
+}
+.source-link:hover { color: var(--green); }
+
+/* ── Misuse Alert ── */
+.misuse-alert {
+  background: rgba(248,113,113,0.07);
+  border: 1px solid rgba(248,113,113,0.25);
+  border-radius: 10px; padding: 14px 16px;
+  font-size: 13px; color: #fca5a5; line-height: 1.6;
+}
+
+/* ── No Results ── */
+.no-results-box {
+  background: rgba(251,191,36,0.05);
+  border: 1px solid rgba(251,191,36,0.2);
+  border-radius: 10px; padding: 14px 18px;
+  font-size: 13px; color: #fbbf24;
+}
+
+/* ── Upload Zone ── */
+.upload-zone {
+  border: 1.5px dashed var(--border);
+  border-radius: 14px; padding: 36px 24px;
+  text-align: center; cursor: pointer;
+  background: var(--card); transition: all 0.3s ease;
+  position: relative; overflow: hidden;
+}
+.upload-zone:hover {
+  border-color: rgba(74,222,128,0.4);
+  background: rgba(74,222,128,0.03);
+}
+.upload-zone h3 {
+  font-size: 16px; font-weight: 600;
+  color: var(--text); margin-bottom: 6px;
+}
+.upload-zone p { font-size: 12px; color: var(--muted); }
+
+/* ── External Buttons ── */
+.ext-grid {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 10px;
+}
+
+.ext-btn {
+  display: flex; align-items: center; justify-content: center;
+  gap: 6px; text-decoration: none;
+  font-size: 13px; font-weight: 600;
+  border: 1px solid; border-radius: 12px;
+  transition: all 0.25s ease;
+  text-align: center;
+}
+.ext-btn:hover { transform: translateY(-3px); filter: brightness(1.2); }
+
+.ext-btn.google {
+  color: #86efac; border-color: rgba(134,239,172,0.3);
+  background: rgba(134,239,172,0.05);
+}
+.ext-btn.google:hover {
+  background: rgba(134,239,172,0.1);
+  box-shadow: 0 4px 20px rgba(134,239,172,0.12);
+}
+.ext-btn.tineye {
+  color: #c4b5fd; border-color: rgba(196,181,253,0.3);
+  background: rgba(196,181,253,0.05);
+}
+.ext-btn.tineye:hover {
+  background: rgba(196,181,253,0.1);
+  box-shadow: 0 4px 20px rgba(196,181,253,0.12);
+}
+.ext-btn.yandex {
+  color: #93c5fd; border-color: rgba(147,197,253,0.3);
+  background: rgba(147,197,253,0.05);
+}
+.ext-btn.yandex:hover {
+  background: rgba(147,197,253,0.1);
+  box-shadow: 0 4px 20px rgba(147,197,253,0.12);
+}
+.ext-btn.bing {
+  color: #a78bfa; border-color: rgba(167,139,250,0.3);
+  background: rgba(167,139,250,0.05);
+}
+.ext-btn.bing:hover {
+  background: rgba(167,139,250,0.1);
+  box-shadow: 0 4px 20px rgba(167,139,250,0.12);
+}
+
+/* ── Social Platform Buttons ── */
+.social-grid {
+  display: grid; grid-template-columns: repeat(2,1fr); gap: 8px;
+}
+
+.social-btn {
+  display: flex; align-items: center; gap: 8px;
+  padding: 10px 14px; text-decoration: none;
+  font-size: 13px; font-weight: 600;
+  border: 1px solid; border-radius: 10px;
+  transition: all 0.2s ease;
+}
+.social-btn:hover {
+  transform: translateY(-2px);
+  filter: brightness(1.15);
+}
+
+/* ── Social Scan Tabs ── */
+.social-tab {
+  padding: 5px 12px;
+  font-size: 12px; font-weight: 600;
+  border-radius: 999px; border: 1px solid;
+  cursor: pointer; transition: all 0.2s;
+  background: transparent;
+  color: var(--muted);
+  border-color: var(--border);
+}
+.social-tab:hover { color: var(--text); border-color: var(--green); }
+.social-tab.active {
+  background: rgba(74,222,128,0.1);
+  border-color: rgba(74,222,128,0.5);
+  color: var(--green);
+}
+
+/* ── Social Result Item ── */
+.social-result-item {
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 12px;
+  padding: 14px 16px;
+  display: flex;
+  gap: 12px;
+  align-items: flex-start;
+  transition: border-color 0.2s;
+}
+.social-result-item:hover { border-color: rgba(74,222,128,0.2); }
